@@ -1,4 +1,7 @@
+/* eslint-disable max-lines */
 import SchaleDBApi from './schale-db-api';
+import { Summon, Skill, Weapon, Gear } from './schema/student';
+import { Language, Server } from './types';
 
 const api = new SchaleDBApi({});
 
@@ -36,6 +39,80 @@ function exportEnum(name: string, values: Set<string>) {
 ${lines.join('\n')}
 };`;
   console.info(enumDefine);
+}
+
+class Struct {
+  name: string;
+
+  fields: Field[] = [];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  addType(fieldName: string, fieldType: string | null = null) {
+    const exists = this.fields.find(f => f.name === fieldName);
+    if (exists === undefined) {
+      const field = new Field(fieldName);
+      field.amount = 1;
+      if (fieldType !== null) {
+        field.addType(fieldType);
+      }
+      this.fields.push(field);
+    } else {
+      exists.amount++;
+      if (fieldType !== null) {
+        exists.addType(fieldType);
+      }
+    }
+  }
+}
+
+class Field {
+  name: string;
+
+  amount: number = 0;
+
+  types: string[] = [];
+
+  nullable: boolean = false;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  addType(type: string): boolean {
+    const exists = this.types.findIndex(t => t === type) >= 0;
+    if (exists) {
+      return false;
+    }
+    this.types.push(type);
+    return true;
+  }
+}
+
+function exportStruct(struct: Struct) {
+  console.info(`export type ${struct.name} = {
+${struct.fields
+  .map(f => `  ${f.name}${f.nullable ? '?' : ''}: ${f.types.join(' | ')};`)
+  .join('\n')}
+};`);
+}
+
+function getArrayType(elements: any[]): string | null {
+  const types = new Set<string>();
+  elements.forEach(element => {
+    types.add(typeof element);
+  });
+  const typeList = Array.from(types);
+  if (typeList.length === 0) {
+    return null;
+  }
+  if (typeList.length === 1) {
+    return `${typeList[0]}[]`;
+  }
+  // return `(${typeList.map(t => `${t}`).join('|')})`;
+  return 'any[]';
 }
 
 describe('Student', () => {
@@ -86,5 +163,229 @@ describe('Student', () => {
     exportEnum('EquipmentTypeSlot1', etSlot1);
     exportEnum('EquipmentTypeSlot2', etSlot2);
     exportEnum('EquipmentTypeSlot3', etSlot3);
+  });
+
+  test('check FavorStatValue', async () => {
+    const students = await api.getStudents({
+      lang: Language.Japanese,
+      server: Server.Japan,
+    });
+
+    students.forEach(student => {
+      const fsv = student.FavorStatValue;
+      expect(fsv.length).toBe(7);
+      fsv.forEach(vs => {
+        // expect(Array.isArray(vs)).toBe(true);
+        expect(vs.length).toBe(2);
+      });
+    });
+  });
+
+  test('struct Student', async () => {
+    const students = await api.getStudents({
+      lang: Language.Japanese,
+      server: Server.Japan,
+    });
+
+    const struct = new Struct('Student');
+    students.forEach(student => {
+      const keys = Object.keys(student);
+      keys.forEach(fieldName => {
+        // @ts-expect-error
+        const value: any = student[fieldName];
+        let type: string | null = typeof value;
+        if (type === 'object' && Array.isArray(value)) {
+          type = getArrayType(value);
+        }
+        struct.addType(fieldName, type);
+      });
+    });
+
+    const types: Record<string, string> = {
+      IsReleased: 'Released',
+      School: 'School',
+      SquadType: 'SquadType',
+      TacticRole: 'TacticRole',
+      Summons: 'Summon[]',
+      Position: 'Position',
+      BulletType: 'BulletType',
+      ArmorType: 'ArmorType',
+      Equipment: 'EquipmentTypeSlots',
+      CharHeightImperial: 'any',
+      Skills: 'Skill[]',
+      FavorStatValue: 'FavorStatValues', // 2-5, 6-10, 11-15, 16-20, 21-30, 31-40, 41-50
+      FurnitureInteraction: 'any',
+      Weapon: 'Weapon',
+      Gear: 'Gear | Empty',
+      SkillExMaterial: 'number[][]',
+      SkillExMaterialAmount: 'number[][]',
+      SkillMaterial: 'number[][]',
+      SkillMaterialAmount: 'number[][]',
+    };
+
+    struct.fields.forEach(f => {
+      const type = types[f.name];
+      if (type !== undefined) {
+        f.types = [type];
+      }
+      f.nullable = f.amount < students.length;
+    });
+
+    exportStruct(struct);
+  });
+
+  test('struct Summon', async () => {
+    const students = await api.getStudents({
+      lang: Language.Japanese,
+      server: Server.Japan,
+    });
+
+    const summons: Summon[] = [];
+    students.forEach(s => summons.push(...s.Summons));
+    console.info(`共计获得召唤物信息 ${summons.length} 个`);
+
+    const struct = new Struct('Summon');
+    summons.forEach(summon => {
+      const keys = Object.keys(summon);
+      keys.forEach(fieldName => {
+        // @ts-expect-error
+        const value: any = summon[fieldName];
+        let type: string | null = typeof value;
+        if (type === 'object' && Array.isArray(value)) {
+          type = getArrayType(value);
+        }
+        struct.addType(fieldName, type);
+      });
+    });
+
+    const types: Record<string, string> = {
+      InheritCasterAmount: 'number[][]',
+    };
+    struct.fields.forEach(f => {
+      const type = types[f.name];
+      if (type !== undefined) {
+        f.types = [type];
+      }
+      f.nullable = f.amount < summons.length;
+    });
+
+    exportStruct(struct);
+  });
+
+  // TODO Skill结构
+  test('struct Skill', async () => {
+    const students = await api.getStudents({
+      lang: Language.Japanese,
+      server: Server.Japan,
+    });
+
+    const skills: Skill[] = [];
+    students.forEach(s => skills.push(...s.Skills));
+    console.info(`共计获得技能信息 ${skills.length} 个`);
+
+    const struct = new Struct('Skill');
+    skills.forEach(skill => {
+      const keys = Object.keys(skill);
+      keys.forEach(fieldName => {
+        // @ts-expect-error
+        const value: any = skill[fieldName];
+        let type: string | null = typeof value;
+        if (type === 'object' && Array.isArray(value)) {
+          type = getArrayType(value);
+        }
+        struct.addType(fieldName, type);
+      });
+    });
+
+    const types: Record<string, string> = {
+      Effects: 'SkillEffect[]',
+    };
+    struct.fields.forEach(f => {
+      const type = types[f.name];
+      if (type !== undefined) {
+        f.types = [type];
+      }
+      f.nullable = f.amount < skills.length;
+    });
+
+    exportStruct(struct);
+  });
+
+  test('struct Weapon', async () => {
+    const students = await api.getStudents({
+      lang: Language.Japanese,
+      server: Server.Japan,
+    });
+    const weapons: Weapon[] = [];
+    students.forEach(s => weapons.push(s.Weapon));
+    console.info(`共计获得专武信息 ${weapons.length} 个`);
+
+    const struct = new Struct('Weapon');
+
+    weapons.forEach(weapon => {
+      const keys = Object.keys(weapon);
+      keys.forEach(fieldName => {
+        // @ts-expect-error
+        const value: any = weapon[fieldName];
+        let type: string | null = typeof value;
+        if (type === 'object' && Array.isArray(value)) {
+          type = getArrayType(value);
+        }
+        struct.addType(fieldName, type);
+      });
+    });
+
+    const types: Record<string, string> = {};
+    struct.fields.forEach(f => {
+      const type = types[f.name];
+      if (type !== undefined) {
+        f.types = [type];
+      }
+      f.nullable = f.amount < weapons.length;
+    });
+
+    exportStruct(struct);
+  });
+
+  test('struct Gear', async () => {
+    const students = await api.getStudents({
+      lang: Language.Japanese,
+      server: Server.Japan,
+    });
+
+    const gears: Gear[] = [];
+    students.forEach(s => {
+      const gear = s.Gear;
+      if (Object.keys(gear).length > 0) {
+        gears.push(gear as Gear);
+      }
+    });
+    console.info(`共计获得爱用品信息 ${gears.length} 个`);
+
+    const struct = new Struct('Gear');
+
+    gears.forEach(gear => {
+      const keys = Object.keys(gear);
+      keys.forEach(fieldName => {
+        // @ts-expect-error
+        const value: any = gear[fieldName];
+        let type: string | null = typeof value;
+        if (type === 'object' && Array.isArray(value)) {
+          type = getArrayType(value);
+        }
+        struct.addType(fieldName, type);
+      });
+    });
+
+    const types: Record<string, string> = {};
+    struct.fields.forEach(f => {
+      const type = types[f.name];
+      if (type !== undefined) {
+        f.types = [type];
+      }
+      f.nullable = f.amount < gears.length;
+    });
+
+    exportStruct(struct);
   });
 });

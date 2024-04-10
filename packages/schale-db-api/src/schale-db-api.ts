@@ -1,9 +1,14 @@
 import axios, { AxiosInstance } from 'axios';
 import Student from './schema/student';
 import Item from './schema/item';
-import { Language } from './types';
+import { Language, Server, toServerIndex } from './types';
 
 const BASE_URL_SCHALE_GG = 'https://schale.gg';
+
+type GetDataParams = {
+  lang?: Language;
+  server?: Server;
+};
 
 export default class SchaleDBApi {
   baseURL: string;
@@ -12,9 +17,16 @@ export default class SchaleDBApi {
 
   lang: Language;
 
-  constructor({ baseURL = BASE_URL_SCHALE_GG, lang = Language.Chinese }) {
+  server: Server;
+
+  constructor({
+    baseURL = BASE_URL_SCHALE_GG,
+    lang = Language.Chinese,
+    server = Server.China,
+  }) {
     this.baseURL = baseURL;
     this.lang = lang;
+    this.server = server;
     this.axios = axios.create({});
   }
 
@@ -30,16 +42,20 @@ export default class SchaleDBApi {
   }
 
   async getData<D>(lang: string, fileName: string, useMin = true): Promise<D> {
-    const extName = useMin ? '.min.json' : '.json';
-    const uri = `/data/${lang}/${fileName}${extName}`;
+    const extName = useMin ? 'min.json' : 'json';
+    const uri = `/data/${lang}/${fileName}.${extName}`;
     return this.get(uri);
   }
 
-  async getStudents({ lang = this.lang }: { lang?: Language }) {
-    return this.getData<Student[]>(lang, 'students', true);
+  async getStudents({ lang = this.lang, server = this.server }: GetDataParams) {
+    const students = await this.getData<Student[]>(lang, 'students', true);
+    const serverIndex = toServerIndex(server);
+    return students.filter(stu => stu.IsReleased[serverIndex]);
   }
 
-  async getItems({ lang = this.lang }: { lang?: Language }) {
-    return this.getData<Item[]>(lang, 'items', true);
+  async getItems({ lang = this.lang, server = this.server }: GetDataParams) {
+    const items = await this.getData<Item[]>(lang, 'items', true);
+    const serverIndex = toServerIndex(server);
+    return items.filter(item => item.IsReleased[serverIndex]);
   }
 }

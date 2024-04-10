@@ -87,9 +87,22 @@ export type EquipmentTypeSlots = [
   EquipmentTypeSlot3,
 ];
 
-export default interface Student {
+export type Empty = Record<string, never>; // {}
+export type MinToMaxValues = [number, number];
+export type FavorStatValues = [
+  [number, number],
+  [number, number],
+  [number, number],
+  [number, number],
+  [number, number],
+  [number, number],
+  [number, number],
+];
+
+type Student = {
   Id: number;
   IsReleased: Released;
+  DefaultOrder: number;
   PathName: string;
   DevName: string;
   Name: string;
@@ -98,6 +111,7 @@ export default interface Student {
   StarGrade: number;
   SquadType: SquadType;
   TacticRole: TacticRole;
+  Summons: Summon[];
   Position: Position;
   BulletType: BulletType;
   ArmorType: ArmorType;
@@ -111,6 +125,20 @@ export default interface Student {
   CollectionBG: string;
   FamilyName: string;
   PersonalName: string;
+  SchoolYear: string;
+  CharacterAge: string;
+  FamilyNameRuby: string;
+  PersonalNameRuby: string;
+  Birthday: string;
+  CharacterSSRNew: string;
+  ProfileIntroduction: string;
+  Hobby: string;
+  CharacterVoice: string;
+  BirthDay: string;
+  Illustrator: string;
+  Designer: string;
+  CharHeightMetric: string;
+  CharHeightImperial: any;
   StabilityPoint: number;
   AttackPower1: number;
   AttackPower100: number;
@@ -128,4 +156,67 @@ export default interface Student {
   AmmoCost: number;
   Range: number;
   RegenCost: number;
-}
+  Skills: Skill[];
+  FavorStatType: string[];
+  FavorStatValue: FavorStatValues;
+  FavorAlts: number[];
+  MemoryLobby: number[];
+  MemoryLobbyBGM: string;
+  FurnitureInteraction: any;
+  FavorItemTags: string[];
+  FavorItemUniqueTags: string[];
+  IsLimited: number;
+  Weapon: Weapon;
+  Gear: Gear | Empty;
+  SkillExMaterial: number[][];
+  SkillExMaterialAmount: number[][];
+  SkillMaterial: number[][];
+  SkillMaterialAmount: number[][];
+  TSAId?: number;
+  DefensePenetration1?: number;
+  DefensePenetration100?: number;
+};
+
+export type Summon = {
+  Id: number;
+  SourceSkill: string;
+  InheritCasterStat: string[];
+  InheritCasterAmount: number[][];
+  ObstacleMaxHP1?: number;
+  ObstacleMaxHP100?: number;
+};
+
+export type Skill = {
+  SkillType: string;
+  Effects: SkillEffect[];
+};
+
+export type SkillEffect = {
+  Type: string;
+};
+
+export type Weapon = {
+  Name: string;
+  Desc: string;
+  AdaptationType: string;
+  AdaptationValue: number;
+  AttackPower1: number;
+  AttackPower100: number;
+  MaxHP1: number;
+  MaxHP100: number;
+  HealPower1: number;
+  HealPower100: number;
+  StatLevelUpType: string;
+};
+
+export type Gear = {
+  Released: Released;
+  StatType: string[];
+  StatValue: MinToMaxValues[];
+  Name: string;
+  Desc: string;
+  TierUpMaterial: number[][];
+  TierUpMaterialAmount: number[][];
+};
+
+export default Student;
