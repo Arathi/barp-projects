@@ -1,0 +1,16 @@
+{
+  "/IsReleased": { "use_type": "Released" },
+  "/School": { "use_type": "School" },
+  "/SquadType": { "use_type": "SquadType" },
+  "/TacticRole": { "use_type": "TacticRole" },
+  "/Position": { "use_type": "Position" },
+  "/BulletType": { "use_type": "BulletType" },
+  "/ArmorType": { "use_type": "ArmorType" },
+  "/StreetBattleAdaptation": { "use_type": "BattleAdaptation" },
+  "/OutdoorBattleAdaptation": { "use_type": "BattleAdaptation" },
+  "/IndoorBattleAdaptation": { "use_type": "BattleAdaptation" },
+  "/WeaponType": { "use_type": "WeaponType" },
+  "/Equipment": { "use_type": "Equipments" },
+  "/Skills": { "use_type": "Skills" },
+  "/Gear/Released": { "use_type": "Released" }
+}

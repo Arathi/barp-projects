@@ -1,0 +1,17 @@
+{
+  "name": "@barp/monorepo",
+  "version": "0.25.722",
+  "description": "蔚蓝档案相关项目Monorepo",
+  "keywords": [
+    "Blue Archive",
+    "蔚蓝档案",
+    "碧藍檔案",
+    "Resource Plan"
+  ],
+  "author": "Arathi of Nebnizilla",
+  "license": "MIT",
+  "packageManager": "pnpm@10.13.1",
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.2"
+  }
+}
