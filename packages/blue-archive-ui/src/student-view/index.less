@@ -1,0 +1,111 @@
+.student-view {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+
+  .upper {
+    position: relative;
+    width: 200px;
+    height: 226px;
+
+    .avatar {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .attack-defense {
+      position: absolute;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .attack {
+      .attack-defense();
+      bottom: 90px;
+
+      &.explosive {
+        background-color: #A70C19;
+      }
+
+      &.piercing {
+        background-color: #B26D1F;
+      }
+
+      &.mystic {
+        background-color: #216F9C;
+      }
+
+      &.sonic {
+        background-color: #9431A5;
+      }
+    }
+
+    .defense {
+      .attack-defense();
+      bottom: 52px;
+
+      &.light {
+        background-color: #A70C19;
+      }
+
+      &.heavy {
+        background-color: #B26D1F;
+      }
+
+      &.special {
+        background-color: #216F9C;
+      }
+
+      &.elastic {
+        background-color: #9431A5;
+      }
+    }
+
+    .role {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      border-radius: 12px 0 0 0;
+
+      &.striker {
+        background-color: #CC1A25;
+      }
+
+      &.special {
+        background-color: #006BFF;
+      }
+    }
+
+    .stars {
+      position: absolute;
+      left: 4px;
+      bottom: 0;
+    }
+
+    .level {
+      position: absolute;
+      left: 8px;
+      top: 0;
+      color: white;
+      font-size: 24px;
+    }
+  }
+
+  .lower {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: end;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0);
+    text-decoration: underline yellow 3px;
+    font-size: 24px;
+  }
+}
