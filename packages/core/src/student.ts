@@ -63,4 +63,9 @@ export interface Student {
    * 装备3等级
    */
   equipmentLevel3: number;
+
+  /**
+   * 好感
+   */
+  bond: number;
 }

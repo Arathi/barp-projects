@@ -1,25 +1,20 @@
+import { CSSProperties, HTMLAttributes } from "react";
 import type { Student, StudentMetadata } from "@barp/core";
-import { AttackType, DefenseType, Role } from "@barp/core";
-import { BASE_URL } from "../constants";
-import { Stars, StarType } from "../stars";
+
+import { BASE_URL } from "@/constants";
+import { Stars, StarType } from "@/stars";
+import { Heart } from "@/heart";
+import { SchaleDbRoles } from "../constants";
 
 import "./index.less";
-import { CSSProperties } from "react";
 
 interface Props {
   metadata: StudentMetadata;
   student?: Student;
+  style?: HTMLAttributes<HTMLDivElement>["style"];
 }
 
-const SchaleDbRoles: Record<Role, string> = {
-  [Role.Tank]: "Tanker",
-  [Role.Dealer]: "DamageDealer",
-  [Role.Healer]: "Healer",
-  [Role.Support]: "Supporter",
-  [Role.TacticalSupport]: "Vehicle",
-};
-
-export const StudentView: React.FC<Props> = ({ metadata, student }) => {
+export const StudentView: React.FC<Props> = ({ metadata, student, style }) => {
   const sdRole = SchaleDbRoles[metadata.role];
 
   const avatarURL = `${BASE_URL}/student/collection/${metadata.id}.webp`;
@@ -66,6 +61,11 @@ export const StudentView: React.FC<Props> = ({ metadata, student }) => {
       <Stars type={type} amount={amount} size={40} gap={-16} />,
     );
     studentOverlay.push(<span className="level">Lv. {student.level}</span>);
+    studentOverlay.push(
+      <div className="bond">
+        <Heart width={32} height={30} bond={student.bond} />
+      </div>,
+    );
   } else {
     metadataOverlay.push(
       <Stars
@@ -79,7 +79,7 @@ export const StudentView: React.FC<Props> = ({ metadata, student }) => {
   }
 
   return (
-    <div className="student-view">
+    <div className="student-view" style={style}>
       <div className="upper" style={{ filter: avatarFilter }}>
         <img
           className="avatar"

@@ -1,0 +1,24 @@
+.student-list {
+  display: flex;
+  flex-direction: column;
+  
+  .student-group {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .divider {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+    margin-bottom: 8px;
+    color: white;
+    transform: skewX(-10deg);
+
+    span {
+      transform: skewX(10deg);
+    }
+  }
+}
