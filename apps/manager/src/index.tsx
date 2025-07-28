@@ -1,10 +1,10 @@
-import ReactDOM from 'react-dom/client';
+import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router";
 import routes from "./routes";
 
-const root = document.getElementById('root');
+import "./index.less";
+
+const root = document.getElementById("root");
 if (root) {
-  ReactDOM.createRoot(root).render(
-    <RouterProvider router={routes} />
-  );
+  ReactDOM.createRoot(root).render(<RouterProvider router={routes} />);
 }

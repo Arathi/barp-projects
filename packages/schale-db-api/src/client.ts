@@ -10,12 +10,16 @@ export type Options = {
   server?: string;
 };
 
-abstract class Client {
+export abstract class Client {
   baseURL: string;
   lang: string;
   server: string;
 
-  constructor({ baseURL = DEFAULT_BASE_URL, lang = DEFAULT_LANG, server = DEFAULT_SERVER }: Options) {
+  constructor({
+    baseURL = DEFAULT_BASE_URL,
+    lang = DEFAULT_LANG,
+    server = DEFAULT_SERVER,
+  }: Options) {
     this.baseURL = baseURL;
     this.lang = lang;
     this.server = server;

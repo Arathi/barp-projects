@@ -1,7 +1,7 @@
-const Students = () => {
+export const Students = () => {
   return (
     <div>
-      <div></div>
+      <div>Student</div>
     </div>
   );
-}
+};
