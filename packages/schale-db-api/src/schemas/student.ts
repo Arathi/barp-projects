@@ -1,15 +1,15 @@
 import type {
-  Released,
-  School,
-  SquadType,
-  TacticRole,
-  Position,
-  BulletType,
   ArmorType,
   BattleAdaptation,
-  WeaponType,
+  BulletType,
   Equipments,
+  Position,
+  Released,
+  School,
   Skills,
+  SquadType,
+  TacticRole,
+  WeaponType,
 } from "./commons";
 
 export interface Student {

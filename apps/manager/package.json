@@ -1,6 +1,6 @@
 {
-  "name": "manager",
-  "version": "0.25.724",
+  "name": "@barp/manager",
+  "version": "0.2508.12",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,17 +12,17 @@
     "@barp/blue-archive-ui": "workspace:*",
     "@barp/core": "workspace:*",
     "@barp/schale-db-api": "workspace:*",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "catalog:react",
+    "react-dom": "catalog:react",
     "react-icons": "^5.5.0",
     "react-router": "^7.7.1"
   },
   "devDependencies": {
-    "@rsbuild/core": "^1.4.11",
-    "@rsbuild/plugin-less": "^1.3.0",
-    "@rsbuild/plugin-react": "^1.3.4",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "typescript": "^5.8.3"
+    "@rsbuild/core": "catalog:rspack",
+    "@rsbuild/plugin-less": "catalog:rspack",
+    "@rsbuild/plugin-react": "catalog:rspack",
+    "@types/react": "catalog:react",
+    "@types/react-dom": "catalog:react",
+    "typescript": "catalog:typescript"
   }
 }

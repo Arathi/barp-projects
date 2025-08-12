@@ -1,6 +1,6 @@
 {
   "name": "@barp/schale-db-api",
-  "version": "0.25.724",
+  "version": "0.2508.12",
   "type": "module",
   "exports": {
     ".": {
@@ -20,12 +20,11 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@rslib/core": "^0.11.0",
-    "@types/node": "^22.16.5",
-    "axios": "^1.10.0",
+    "@rslib/core": "catalog:rspack",
+    "@types/node": "catalog:typescript",
+    "axios": "^1.11.0",
     "jsonpath-js": "^0.2.0",
-    "jsonpath-plus": "^10.3.0",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.4"
+    "typescript": "catalog:typescript",
+    "vitest": "catalog:test"
   }
 }

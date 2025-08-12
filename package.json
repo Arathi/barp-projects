@@ -10,8 +10,8 @@
   ],
   "author": "Arathi of Nebnizilla",
   "license": "MIT",
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.14.0",
   "devDependencies": {
-    "@biomejs/biome": "^2.1.2"
+    "@biomejs/biome": "^2.1.4"
   }
 }

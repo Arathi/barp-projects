@@ -1,9 +1,13 @@
-import { defineConfig } from 'vitest/config';
+import { resolve } from "node:path";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   // Configure Vitest (https://vitest.dev/config/)
   test: {
-    environment: 'jsdom',
-    setupFiles: './vitest.setup.ts',
+    environment: "jsdom",
+    setupFiles: "./vitest.setup.ts",
+    alias: {
+      "@": resolve(__dirname, "src"),
+    },
   },
 });

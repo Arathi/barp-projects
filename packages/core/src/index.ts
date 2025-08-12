@@ -1,10 +1,10 @@
 export type { Student } from "./student";
-export type { StudentMetadata } from "./student-metadata";
 
+export type { StudentMetadata } from "./student-metadata";
 export {
   AttackType,
   DefenseType,
-  Role,
   EquipmentType,
+  Role,
   Squad,
 } from "./student-metadata";
